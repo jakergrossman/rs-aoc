@@ -88,11 +88,13 @@ pub struct AocDay<T> {
 
 #[allow(dead_code)]
 impl AocDay<String> {
-    pub fn new(year: i32, day: u8) -> Self {
+    pub fn new(year: i32, day: u8, is_sample: bool) -> Self {
+        let input_set = if is_sample { "sample" } else { "real" };
+
         AocDay {
             year,
             day,
-            input_path: format!("inputs/{}/real/day{:02}.txt", year, day),
+            input_path: format!("inputs/{}/{}/day{:02}.txt", year, input_set, day),
             serializer: |x| x
         }
     }
@@ -100,8 +102,8 @@ impl AocDay<String> {
 
 #[allow(dead_code)]
 impl<T> AocDay<T> {
-    pub fn new_with_serializer(year: i32, day: u8, serializer: fn(String) -> T, sample: bool) -> Self {
-        let input_set = if sample { "sample" } else { "real" };
+    pub fn new_with_serializer(year: i32, day: u8, serializer: fn(String) -> T, is_sample: bool) -> Self {
+        let input_set = if is_sample { "sample" } else { "real" };
 
         AocDay {
             year,
