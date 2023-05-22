@@ -12,4 +12,5 @@ fn main() {
     aoc2022::day02::run(is_sample);
     aoc2022::day03::run(is_sample);
     aoc2022::day04::run(is_sample);
+    aoc2022::day05::run(is_sample);
 }

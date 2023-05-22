@@ -1,24 +1,19 @@
-use crate::aoclib::day::{AocDay, Solver};
+use crate::{aoclib::day::{AocDay, Solver}, run_day_with_serializer};
 
 /// Parse elf packs from input
 /// Each elf pack is a series of integers,
 /// one per line, with each elf pack 
 /// separated by an empty line.
 pub fn elf_packs(s: String) -> Vec<u128> {
-    s.split("\n\n").map(|bag| {
+    s.trim().split("\n\n").map(|bag| {
         bag.split("\n")
             .map(|line| u128::from_str_radix(line, 10).expect("Invalid Input"))
             .sum()
     }).collect()
 }
 
-pub fn run(sample: bool) {
-    let day = AocDay::new_with_serializer(2022, 1, elf_packs, sample);
-    let part1 = Solver::new(1, part1);
-    let part2 = Solver::new(2, part2);
-
-    day.run(part1);
-    day.run(part2);
+pub fn run(is_sample: bool) {
+    run_day_with_serializer!(2022, 1, is_sample, elf_packs, part1, part2);
 }
 
 fn part1(pack_sums: Vec<u128>) -> u128 {

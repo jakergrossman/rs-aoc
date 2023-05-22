@@ -72,11 +72,45 @@ macro_rules! run_solver {
         };
 
         #[cfg(feature = "colored-output")]
-        println!(" ↪ {} {}", "Finished in".bright_green(), time_taken_str.bright_white());
+        println!(" ↪ {} {}", "Finished in".dimmed(), time_taken_str.dimmed().italic());
 
         #[cfg(not(feature = "colored-output"))]
         println!(" ↪ Finished in {}", time_taken_str);
     };
+}
+
+#[macro_export]
+macro_rules! run_day_with_serializer {
+    ($year:expr, $day:expr, $is_sample:expr, $serializer:ident $(,$algo:ident)*) => {
+        #[allow(unused_assignments, unused_variables, unused_mut)]
+        {
+            let day = AocDay::new_with_serializer($year, $day, $serializer, $is_sample);
+            let mut part_idx = 1;
+            $(
+                {
+                    day.run(Solver::new(part_idx, $algo));
+                    part_idx += 1;
+                }
+            )*;
+            println!("");
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! run_day {
+    ($year:expr, $day:expr, $is_sample:expr $(,$algo:ident)*) => {
+        let day = AocDay::new($year, $day, $is_sample);
+        let mut part_idx = 1;
+        $(
+            #[allow(unused_assignments)]
+            {
+                day.run(Solver::new(part_idx, $algo));
+                part_idx += 1;
+            }
+        )*;
+        println!("");
+    }
 }
 
 pub struct AocDay<T> {
@@ -125,7 +159,7 @@ impl<T> AocDay<T> {
         input_file.read_to_string(&mut contents).expect("File read error");
 
         print_info!(self, solver);
-        run_solver!(solver, (self.serializer)(contents.trim().to_string()));
+        run_solver!(solver, (self.serializer)(contents.to_string()));
     }
 }
 

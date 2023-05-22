@@ -1,14 +1,10 @@
 use crate::aoclib::day::*;
+use crate::run_day;
 
 use std::collections::HashSet;
 
 pub fn run(is_sample: bool) {
-    let day = AocDay::new(2022, 3, is_sample);
-    let part1 = Solver::new(1, part1);
-    let part2 = Solver::new(2, part2);
-
-    day.run(part1);
-    day.run(part2);
+    run_day!(2022, 3, is_sample, part1, part2);
 }
 
 // TODO:
@@ -28,14 +24,14 @@ fn part2(s: String) -> u128 {
     let sacks: Vec<&str> = s.lines().collect();
 
     for i in (0..sacks.len()).step_by(3) {
-        let elf1: HashSet<char> = HashSet::from_iter(sacks[i].chars().into_iter());
-        let elf2: HashSet<char> = HashSet::from_iter(sacks[i+1].chars().into_iter());
+        let elf1: HashSet<char> = HashSet::from_iter(sacks[i].chars().into_iter()); let elf2: HashSet<char> = HashSet::from_iter(sacks[i+1].chars().into_iter());
         let elf3: HashSet<char> = HashSet::from_iter(sacks[i+2].chars().into_iter());
 
         let mut inter = elf1.iter().filter(|k| elf2.contains(k)).filter(|k| elf3.contains(k));
 
         sum += priority(inter.next().unwrap());
     }
+
 
     sum
 }
