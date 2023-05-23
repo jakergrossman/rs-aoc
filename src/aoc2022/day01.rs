@@ -1,4 +1,4 @@
-use crate::{aoclib::day::{AocDay, Solver}, run_day_with_serializer};
+use crate::{aoclib::day::*, run_day};
 
 /// Parse elf packs from input
 /// Each elf pack is a series of integers,
@@ -13,7 +13,7 @@ pub fn elf_packs(s: String) -> Vec<u128> {
 }
 
 pub fn run(is_sample: bool) {
-    run_day_with_serializer!(2022, 1, is_sample, elf_packs, part1, part2);
+    run_day!(2022, 1, is_sample, elf_packs, (part1, part2));
 }
 
 fn part1(pack_sums: Vec<u128>) -> u128 {

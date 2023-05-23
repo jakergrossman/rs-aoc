@@ -1,5 +1,4 @@
-use crate::aoclib::day::*;
-use crate::run_day_with_serializer;
+use crate::{aoclib::day::*, run_day};
 
 struct ElfPair {
     elf1: (u128, u128),
@@ -36,7 +35,7 @@ fn serialize(s: String) -> Vec<ElfPair> {
 }
 
 pub fn run(is_sample: bool) {
-    run_day_with_serializer!(2022, 4, is_sample, serialize, part1, part2);
+    run_day!(2022, 4, is_sample, serialize, (part1, part2));
 }
 
 fn part1(pairs: Vec<ElfPair>) -> u128 {

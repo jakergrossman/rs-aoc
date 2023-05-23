@@ -1,10 +1,9 @@
-use crate::aoclib::day::*;
-use crate::run_day;
+use crate::{aoclib::day::*, run_day};
 
 use std::collections::HashSet;
 
 pub fn run(is_sample: bool) {
-    run_day!(2022, 3, is_sample, part1, part2);
+    run_day!(2022, 3, is_sample, (part1, part2));
 }
 
 // TODO:

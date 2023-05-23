@@ -80,36 +80,27 @@ macro_rules! run_solver {
 }
 
 #[macro_export]
-macro_rules! run_day_with_serializer {
-    ($year:expr, $day:expr, $is_sample:expr, $serializer:ident $(,$algo:ident)*) => {
+macro_rules! run_day {
+    ($year:expr, $day:expr, $is_sample:expr, ($($algo:ident),*)) => {
+        {
+            let identity = |x| x;
+            run_day!($year, $day, $is_sample, identity, ($($algo),*));
+        }
+    };
+
+    ($year:expr, $day:expr, $is_sample:expr, $serializer:ident, ($($algo:ident),*)) => {
         #[allow(unused_assignments, unused_variables, unused_mut)]
         {
-            let day = AocDay::new_with_serializer($year, $day, $serializer, $is_sample);
+            let day = AocDay::new($year, $day, $serializer, $is_sample);
             let mut part_idx = 1;
             $(
                 {
                     day.run(Solver::new(part_idx, $algo));
                     part_idx += 1;
                 }
-            )*;
+            )*
             println!("");
         }
-    }
-}
-
-#[macro_export]
-macro_rules! run_day {
-    ($year:expr, $day:expr, $is_sample:expr $(,$algo:ident)*) => {
-        let day = AocDay::new($year, $day, $is_sample);
-        let mut part_idx = 1;
-        $(
-            #[allow(unused_assignments)]
-            {
-                day.run(Solver::new(part_idx, $algo));
-                part_idx += 1;
-            }
-        )*;
-        println!("");
     }
 }
 
@@ -121,22 +112,8 @@ pub struct AocDay<T> {
 }
 
 #[allow(dead_code)]
-impl AocDay<String> {
-    pub fn new(year: i32, day: u8, is_sample: bool) -> Self {
-        let input_set = if is_sample { "sample" } else { "real" };
-
-        AocDay {
-            year,
-            day,
-            input_path: format!("inputs/{}/{}/day{:02}.txt", year, input_set, day),
-            serializer: |x| x
-        }
-    }
-}
-
-#[allow(dead_code)]
 impl<T> AocDay<T> {
-    pub fn new_with_serializer(year: i32, day: u8, serializer: fn(String) -> T, is_sample: bool) -> Self {
+    pub fn new(year: i32, day: u8, serializer: fn(String) -> T, is_sample: bool) -> Self {
         let input_set = if is_sample { "sample" } else { "real" };
 
         AocDay {

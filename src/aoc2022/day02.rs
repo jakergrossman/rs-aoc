@@ -1,4 +1,4 @@
-use crate::{aoclib::day::{AocDay, Solver}, run_day_with_serializer};
+use crate::{aoclib::day::*, run_day};
 
 #[derive(PartialEq, Clone, Copy)]
 enum Move {
@@ -96,7 +96,7 @@ fn moves(s: String) -> Vec<MoveSet> {
 }
 
 pub fn run(is_sample: bool) {
-    run_day_with_serializer!(2022, 2, is_sample, moves, part1, part2);
+    run_day!(2022, 2, is_sample, moves, (part1, part2));
 }
 
 fn part1(moves: Vec<MoveSet>) -> u128 {
