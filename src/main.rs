@@ -8,9 +8,5 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let is_sample = args.contains(&String::from("--sample"));
 
-    aoc2022::day01::run(is_sample);
-    aoc2022::day02::run(is_sample);
-    aoc2022::day03::run(is_sample);
-    aoc2022::day04::run(is_sample);
-    aoc2022::day05::run(is_sample);
+    aoc2022::run(is_sample);
 }
