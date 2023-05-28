@@ -6,6 +6,7 @@ pub mod day05;
 pub mod day06;
 pub mod day09;
 pub mod day10;
+pub mod day11;
 
 pub fn run(is_sample: bool) {
     day01::run(is_sample);
@@ -16,4 +17,5 @@ pub fn run(is_sample: bool) {
     day06::run(is_sample);
     day09::run(is_sample);
     day10::run(is_sample);
+    day11::run(is_sample);
 }
