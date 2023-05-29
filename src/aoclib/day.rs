@@ -1,6 +1,4 @@
-use std::fmt::Display;
-use std::fs::OpenOptions;
-use std::io::{Read, Write};
+use std::{fs::OpenOptions, fmt::Display, io::Read, io::Write};
 
 #[cfg(feature = "colored-output")]
 use colored::*;
@@ -79,20 +77,14 @@ macro_rules! run_solver {
     };
 }
 
-#[macro_export]
-macro_rules! run_day {
-    ($year:expr, $day:expr, $is_sample:expr, ($($algo:ident),*)) => {
-        {
-            let identity = |x| x;
-            run_day!($year, $day, $is_sample, identity, ($($algo),*));
-        }
-    };
-
-    ($year:expr, $day:expr, $is_sample:expr, $serializer:ident, ($($algo:ident),*)) => {
+/// Create a run method for a single day that serializes the entire input file
+macro_rules! aoc_day_with_serializer {
+    ($year:literal, $day:literal, $serializer:expr $(,$algo:expr)*) => {
         #[allow(unused_assignments, unused_variables, unused_mut)]
-        {
-            let day = AocDay::new($year, $day, $serializer, $is_sample);
+        pub fn run(is_sample: bool) {
+            let day = AocDay::new($year, $day, $serializer, is_sample);
             let mut part_idx = 1;
+
             $(
                 {
                     day.run(Solver::new(part_idx, $algo));
@@ -101,6 +93,26 @@ macro_rules! run_day {
             )*
             println!("");
         }
+    };
+}
+
+/// Create a run method for a single day that serializes each line an input
+/// file into a vector
+macro_rules! aoc_day_with_line_serializer {
+    ($year:literal, $day:literal, $line_serializer:expr $(,$algo:expr)*) => {
+        aoc_day_with_serializer!(
+            $year,
+            $day,
+            |str: String| str.lines().map($line_serializer).collect()
+            $(,$algo)*
+            );
+    }
+}
+
+/// Create a run method for a single day that does not serialize the input
+macro_rules! aoc_day {
+    ($year:literal, $day:literal $(,$algo:expr)*) => {
+        aoc_day_with_serializer!($year, $day, |x| x $(,$algo)*);
     }
 }
 
@@ -152,7 +164,6 @@ impl<T, D: Display> Solver<T, D> {
     }
 }
 
-#[macro_export]
 macro_rules! run_year {
     ($is_sample:expr, $days:expr, $(($day_id:expr, $fn:expr)),*) => {
         let supported_days = vec![ $($day_id),* ];
@@ -164,6 +175,7 @@ macro_rules! run_year {
             }
          )*;
 
+        use crate::aoclib::cli::DaySpecifier;
         let run_days = match $days {
             DaySpecifier::All => Some(supported_days),
             DaySpecifier::Pick(days) => {
@@ -190,3 +202,8 @@ macro_rules! run_year {
         }
     }
 }
+
+pub(crate) use aoc_day_with_serializer;
+pub(crate) use aoc_day_with_line_serializer;
+pub(crate) use aoc_day;
+pub(crate) use run_year;

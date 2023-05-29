@@ -1,4 +1,4 @@
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
 
 #[derive(Debug)]
 enum Instruction {
@@ -22,13 +22,11 @@ fn parse_file(s: String) -> Vec<Instruction> {
     s.lines().map(Instruction::parse).collect()
 }
 
-pub fn run(is_sample: bool) {
-    // the output of part two is textual, and entirely based
-    // on part one. the combined result appears as a single
-    // string from part one that appears to be both the
-    // part one AND part two solution
-    run_day!(2022, 10, is_sample, parse_file, (solution));
-}
+// the output of part two is textual, and entirely based
+// on part one. the combined result appears as a single
+// string from part one that appears to be both the
+// part one AND part two solution
+aoc_day_with_serializer!(2022, 10, parse_file, solution);
 
 fn significant(n: usize) -> bool {
     (n + 20) % 40 == 0
@@ -51,9 +49,9 @@ fn solution(ops: Vec<Instruction>) -> String {
             }
 
             if (register-1..=register+1).contains(&(pc % 40)) {
-                s += "#";
+                s += "█";
             } else {
-                s += ".";
+                s += " ";
             }
 
             pc += 1;

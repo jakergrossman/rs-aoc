@@ -1,4 +1,4 @@
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
 
 use std::str::Lines;
 
@@ -60,9 +60,7 @@ fn serializer(s: String) -> (Vec<Vec<char>>, Vec<MoveDescriptor>) {
     (stacks, moves)
 }
 
-pub fn run(is_sample: bool) {
-    run_day!(2022, 5, is_sample, serializer, (part1, part2));
-}
+aoc_day_with_serializer!(2022, 5, serializer, part1, part2);
 
 fn part1(input: (Vec<Vec<char>>, Vec<MoveDescriptor>)) -> String {
     let mut stacks = input.0;

@@ -1,6 +1,6 @@
 use std::ops::RangeInclusive;
 
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
 
 trait InclusiveRangeExt {
     fn contains_range(&self, other: &Self) -> bool;
@@ -47,13 +47,7 @@ impl ElfPair {
     }
 }
 
-fn serialize(s: String) -> Vec<ElfPair> {
-    s.lines().map(|l| ElfPair::new(l).expect("Invalid input")).collect()
-}
-
-pub fn run(is_sample: bool) {
-    run_day!(2022, 4, is_sample, serialize, (part1, part2));
-}
+aoc_day_with_line_serializer!(2022, 4, |e| ElfPair::new(e).unwrap(), part1, part2);
 
 fn part1(pairs: Vec<ElfPair>) -> u128 {
     pairs.iter().filter(|pair| pair.elf1.contains_range_reflective(&pair.elf2)).count() as u128

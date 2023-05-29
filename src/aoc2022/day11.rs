@@ -1,13 +1,13 @@
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
 
 #[derive(Clone)]
 enum WorryValue {
     Old,
-    Num(u64),
+    Num(u128),
 }
 
 impl WorryValue {
-    fn value(&self, old: u64) -> u64 {
+    fn value(&self, old: u128) -> u128 {
         match self {
             WorryValue::Num(n) => *n,
             WorryValue::Old => old
@@ -22,7 +22,7 @@ enum Operation {
 }
 
 impl Operation {
-    fn apply(&self, old: u64) -> u64 {
+    fn apply(&self, old: u128) -> u128 {
         match &self {
             Operation::Add(n) => old + n.value(old),
             Operation::Mul(n) => old * n.value(old),
@@ -32,14 +32,14 @@ impl Operation {
 
 #[derive(Clone)]
 struct PassTest {
-    divisor: u64,
+    divisor: u128,
     true_monkey: usize,
     false_monkey: usize
 }
 
 #[derive(Clone)]
 struct Monkey {
-    items: Vec<u64>,
+    items: Vec<u128>,
     operation: Operation,
     pass_test: PassTest,
 }
@@ -83,14 +83,14 @@ fn parse(s: String) -> Option<Vec<Monkey>> {
     Some(monkeys)
 }
 
-fn solution<const PRE_SCALER: u64, const ROUNDS: usize>(ms: Option<Vec<Monkey>>) -> u64 {
-    let mut monkeys = ms.unwrap();
+fn solution<const PRE_SCALER: u128, const ROUNDS: usize>(ms: Vec<Monkey>) -> u128 {
+    let mut monkeys = ms;
     let mut inspections = vec![0; monkeys.len()];
-    let common_multiple: u64 = monkeys.iter().map(|m| m.pass_test.divisor).product();
+    let common_multiple: u128 = monkeys.iter().map(|m| m.pass_test.divisor).product();
 
     for _ in 0..ROUNDS {
         for idx in 0..monkeys.len() {
-            let items: Vec<u64> = monkeys[idx].items.drain(..).collect();
+            let items: Vec<u128> = monkeys[idx].items.drain(..).collect();
             let monkey = monkeys[idx].clone();
 
             for worry in items {
@@ -115,7 +115,4 @@ fn solution<const PRE_SCALER: u64, const ROUNDS: usize>(ms: Option<Vec<Monkey>>)
     inspections.iter().rev().take(2).product()
 }
 
-pub fn run(is_sample: bool) {
-    let (part1, part2) = ( solution::<3, 20>, solution::<1, 10_000>);
-    run_day!(2022, 11, is_sample, parse, (part1, part2));
-}
+aoc_day_with_serializer!(2022, 11, |s| parse(s).expect("Malformed input"), solution::<3, 20>, solution::<1, 10_000>);

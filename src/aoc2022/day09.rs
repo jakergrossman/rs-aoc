@@ -1,4 +1,4 @@
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
 use std::collections::HashSet;
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
@@ -10,14 +10,17 @@ struct Point {
 impl Point {
     const MOVE_THRESHOLD: i128 = 2;
 
-    fn from_str(dir: &str, distance: &str) -> Self {
-        match dir {
-            "U" => Self { x: 0, y: i128::from_str_radix(distance, 10).unwrap() },
-            "D" => Self { x: 0, y: -i128::from_str_radix(distance, 10).unwrap() },
-            "L" => Self { x: -i128::from_str_radix(distance, 10).unwrap(), y: 0 },
-            "R" => Self { x: i128::from_str_radix(distance, 10).unwrap(), y: 0 },
+    fn from_str(dir: &str, distance: &str) -> Result<Self, std::num::ParseIntError> {
+        let magnitude = distance.parse()?;
+        let p = match dir {
+            "U" => Self { x: 0, y: magnitude },
+            "D" => Self { x: 0, y: -magnitude },
+            "L" => Self { x: -magnitude, y: 0 },
+            "R" => Self { x: magnitude, y: 0 },
             _ => panic!("Invalid input")
-        }
+        };
+
+        Ok(p)
     }
 
     fn normal(&self) -> Self {
@@ -66,16 +69,12 @@ impl std::ops::Mul<i128> for Point {
     }
 }
 
-fn serialize<'a>(s: String) -> Vec<Point> {
-    s.lines().map(|line| {
-        let mut tokens = line.split_ascii_whitespace();
-        Point::from_str(tokens.next().unwrap(), tokens.next().unwrap())
-    }).collect()
+fn serialize(line: &str) -> Point {
+    let (direction, distance) = line.split_once(" ").expect("Malformed input");
+    Point::from_str(direction, distance).expect("Malformed input")
 }
 
-pub fn run(is_sample: bool) {
-    run_day!(2022, 9, is_sample, serialize, (part1));
-}
+aoc_day_with_line_serializer!(2022, 9, serialize, part1);
 
 fn part1(directions: Vec<Point>) -> usize {
     let mut head = Point { x: 0, y: 0 };

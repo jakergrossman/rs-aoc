@@ -1,4 +1,5 @@
-use crate::{run_year, aoclib::cli::DaySpecifier};
+use crate::aoclib::day::*;
+use crate::aoclib::cli::*;
 
 pub mod day01;
 pub mod day02;

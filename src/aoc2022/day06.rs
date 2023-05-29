@@ -1,10 +1,7 @@
-use crate::{aoclib::day::*, run_day};
+use crate::aoclib::day::*;
+use itertools::Itertools;
 
-pub fn run(is_sample: bool) {
-    let part1 = solution::<4>;
-    let part2 = solution::<14>;
-    run_day!(2022, 6, is_sample, (part1, part2));
-}
+aoc_day!(2022, 6, solution::<4>, solution::<14>);
 
 pub fn solution<const WINDOW_SIZE: usize> (s: String) -> usize {
     // first whole window is after WINDOW_SIZE characters
@@ -15,11 +12,7 @@ pub fn solution<const WINDOW_SIZE: usize> (s: String) -> usize {
         // for such small WINDOW_SIZES, using a sort/dedup
         // is faster than a HashSet (about 66% faster for my
         // specific inputs)
-        let mut v: Vec<&u8> = w.iter().collect();
-        v.sort();
-        v.dedup();
-
-        if v.len() == WINDOW_SIZE {
+        if w.iter().sorted().dedup().count() == WINDOW_SIZE {
             return index;
         }
 
