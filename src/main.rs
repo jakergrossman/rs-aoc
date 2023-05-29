@@ -11,6 +11,7 @@ fn main() -> Result<(), String> {
     let is_sample = specifiers.sample;
 
     match specifiers.year {
+        2021 => Ok(aoc2021::run(specifiers.days, is_sample)),
         2022 => Ok(aoc2022::run(specifiers.days, is_sample)),
         _ => Err(format!("Year {} is not implemented", specifiers.year)),
     }
