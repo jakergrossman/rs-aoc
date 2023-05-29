@@ -11,5 +11,6 @@ default = ["colored-output"]
 colored-output = ["colored"]
 
 [dependencies]
+clap = { version = "4.3.0", features = ["cargo", "color", "derive"] }
 colored = { version = "1.9", optional = true }
 time = "0.3.21"

@@ -1,3 +1,5 @@
+use crate::{run_year, aoclib::cli::DaySpecifier};
+
 pub mod day01;
 pub mod day02;
 pub mod day03;
@@ -8,14 +10,18 @@ pub mod day09;
 pub mod day10;
 pub mod day11;
 
-pub fn run(is_sample: bool) {
-    day01::run(is_sample);
-    day02::run(is_sample);
-    day03::run(is_sample);
-    day04::run(is_sample);
-    day05::run(is_sample);
-    day06::run(is_sample);
-    day09::run(is_sample);
-    day10::run(is_sample);
-    day11::run(is_sample);
+pub fn run(days: DaySpecifier, is_sample: bool) {
+    run_year!(
+        is_sample,
+        days,
+        (1, day01::run),
+        (2, day02::run),
+        (3, day03::run),
+        (4, day04::run),
+        (5, day05::run),
+        (6, day06::run),
+        (9, day09::run),
+        (10, day10::run),
+        (11, day11::run)
+    );
 }

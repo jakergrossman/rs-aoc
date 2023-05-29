@@ -151,3 +151,42 @@ impl<T, D: Display> Solver<T, D> {
         Solver { part, algorithm }
     }
 }
+
+#[macro_export]
+macro_rules! run_year {
+    ($is_sample:expr, $days:expr, $(($day_id:expr, $fn:expr)),*) => {
+        let supported_days = vec![ $($day_id),* ];
+
+        let mut day_table: [fn(bool); 25] = [|_| (); 25];
+        $(
+            {
+                day_table[$day_id-1] = $fn;
+            }
+         )*;
+
+        let run_days = match $days {
+            DaySpecifier::All => Some(supported_days),
+            DaySpecifier::Pick(days) => {
+                let unsupported_days: Vec<u8> =
+                        days.clone().into_iter()
+                        .filter(|d| !supported_days.contains(d))
+                        .collect();
+
+                match unsupported_days.len() {
+                    0 => Some(days),
+                    _ => {
+                        println!("Unimplemented days: {:?}", unsupported_days);
+                        None
+                    },
+                }
+            }
+        };
+
+        if let Some(mut days) = run_days {
+            days.sort();
+            for d in days {
+                day_table[d as usize - 1]($is_sample);
+            }
+        }
+    }
+}

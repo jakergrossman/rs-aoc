@@ -1,12 +1,17 @@
 mod aoclib;
 
+mod aoc2021;
 mod aoc2022;
 
-use std::env;
+use clap::Parser;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let is_sample = args.contains(&String::from("--sample"));
+fn main() -> Result<(), String> {
+    let specifiers = aoclib::cli::AocCli::parse();
 
-    aoc2022::run(is_sample);
+    let is_sample = specifiers.sample;
+
+    match specifiers.year {
+        2022 => Ok(aoc2022::run(specifiers.days, is_sample)),
+        _ => Err(format!("Year {} is not implemented", specifiers.year)),
+    }
 }
