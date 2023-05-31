@@ -175,11 +175,11 @@ macro_rules! run_year {
             }
          )*;
 
-        use crate::aoclib::cli::DaySpecifier;
+        use crate::aoclib::cli::Specifier;
         let run_days = match $days {
-            DaySpecifier::All => Some(supported_days),
-            DaySpecifier::Pick(days) => {
-                let unsupported_days: Vec<u8> =
+            Specifier::All => Some(supported_days),
+            Specifier::Pick(days) => {
+                let unsupported_days: Vec<u16> =
                         days.clone().into_iter()
                         .filter(|d| !supported_days.contains(d))
                         .collect();

@@ -11,7 +11,7 @@ pub mod day09;
 pub mod day10;
 pub mod day11;
 
-pub fn run(days: DaySpecifier, is_sample: bool) {
+pub fn run(days: Specifier, is_sample: bool) {
     run_year!(
         is_sample,
         days,
